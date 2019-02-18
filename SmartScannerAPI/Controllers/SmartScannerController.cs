@@ -22,33 +22,29 @@ namespace SmartScannerAPI.Controllers
 
         const string endPoint = "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr";
 
-        /*[HttpPost]
+        [HttpPost]
         [Route("PostImage")]
-        [AllowAnonymous]*/
-        public async Task<Results> Get()
+        [AllowAnonymous]
+        public async Task<Results> Post()
         {
-            /*string uploadPath = "~/ScanImage";
-            HttpPostedFile file = null;
-            if (HttpContext.Current.Request.Files.Count > 0)
+            string uploadPath = "~/ScanImage/";
+            var httpRequest = HttpContext.Current.Request;
+            var filePath= string.Empty;
+            
+            foreach (string file in httpRequest.Files)
             {
-                file = HttpContext.Current.Request.Files.Get("file");
+                var postedFile = httpRequest.Files[file];
+                 filePath = HttpContext.Current.Server.MapPath(uploadPath + postedFile.FileName);
+                postedFile.SaveAs(filePath);
+                // NOTE: To store in memory use postedFile.InputStream
             }
             
-            if (!Directory.Exists(HttpContext.Current.Server.MapPath(uploadPath)))
-            {
-                // If it doesn't exist, create the directory
-                Directory.CreateDirectory(HttpContext.Current.Server.MapPath(uploadPath));
-            }
-
-            //Upload File
-            file.SaveAs(HttpContext.Current.Server.MapPath($"{uploadPath}/{file.FileName}"));*/
-
             var ci = new ContactInfo();
             ImageInfoViewModel responeData = new ImageInfoViewModel();
             string extractedResult = "";
             var errors = new List<string>();
 
-            HttpResponseMessage response = await GetAzureVisionAPIResponse();
+            HttpResponseMessage response = await GetAzureVisionAPIResponse(filePath);
             // Get the JSON response.
             string result = await response.Content.ReadAsStringAsync();
 
@@ -112,9 +108,9 @@ namespace SmartScannerAPI.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        private async Task<HttpResponseMessage> GetAzureVisionAPIResponse()
+        private async Task<HttpResponseMessage> GetAzureVisionAPIResponse(string imageFilePath)
         {
-            string imageFilePath = @"C:\Users\satprpa\Desktop\Temp\BusinessCard.jpg";
+            //string imageFilePath = @"C:\Users\satprpa\Desktop\Temp\Meher.jpg";
             HttpClient client = new HttpClient();
 
             // Request headers.
