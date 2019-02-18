@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartScanner", "SmartScannerAPI\SmartScannerAPI.csproj", "{3891E7F3-0CE0-42E2-9B02-FA2513E4DCC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartScanner.OCR.JSONResultsParser", "SmartScanner.OCR.JSONResultsParser\SmartScanner.OCR.JSONResultsParser.csproj", "{BC1F81F6-0871-496B-9D56-3BF32760F623}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3891E7F3-0CE0-42E2-9B02-FA2513E4DCC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3891E7F3-0CE0-42E2-9B02-FA2513E4DCC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3891E7F3-0CE0-42E2-9B02-FA2513E4DCC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3891E7F3-0CE0-42E2-9B02-FA2513E4DCC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC1F81F6-0871-496B-9D56-3BF32760F623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1F81F6-0871-496B-9D56-3BF32760F623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1F81F6-0871-496B-9D56-3BF32760F623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1F81F6-0871-496B-9D56-3BF32760F623}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97078ABF-E071-471B-9408-9267DC4942E1}
+	EndGlobalSection
+EndGlobal
