@@ -146,25 +146,36 @@ namespace SmartScannerAPI.Controllers
             }
             return response;
         }
-
+        /// <summary>
+        /// Insert records to Dynamics Entity
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         private string CreateLeadInCrm(Results result)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             CrmServiceClient service = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRMConnection"].ConnectionString);
-            Entity leadRecord = new Entity("lead");
+            Entity leadRecord = new Entity("new_businesscardlead");
 
-            if (!string.IsNullOrWhiteSpace(result.Info["Name"]))
-            {
-                string[] ssize = result.Info["Name"].Split(null);
-                leadRecord.Attributes.Add("firstname", ssize[0]);
-                leadRecord.Attributes.Add("lastname", ssize[1]);
-            }
+            //if (!string.IsNullOrWhiteSpace(result.Info["Name"]))
+            //{
+            //    string[] ssize = result.Info["Name"].Split(null);
+            //    leadRecord.Attributes.Add("firstname", ssize[0]);
+            //    leadRecord.Attributes.Add("lastname", ssize[1]);
+            //}
 
-            leadRecord.Attributes.Add("emailaddress1", result.Info["Email"]);
-            leadRecord.Attributes.Add("companyname", result.Info["Company"]);
-            leadRecord.Attributes.Add("websiteurl", result.Info["Website"]);
-            leadRecord.Attributes.Add("telephone1", result.Info["Phone"]);
+            leadRecord.Attributes.Add("new_name", result.Info["Name"]);
+            leadRecord.Attributes.Add("new_company", result.Info["Company"]);
+            leadRecord.Attributes.Add("new_title", result.Info["Title"]);
+            leadRecord.Attributes.Add("new_citystatezip", result.Info["CityStateZip"]);
+            leadRecord.Attributes.Add("new_email", result.Info["Email"]);
+            leadRecord.Attributes.Add("new_website", result.Info["Website"]);
+            leadRecord.Attributes.Add("new_facebook", result.Info["Facebook"]);
+            leadRecord.Attributes.Add("new_twitter", result.Info["Twitter"]);
+            leadRecord.Attributes.Add("new_phone", result.Info["Phone"]);
+            leadRecord.Attributes.Add("new_fax", result.Info["Fax"]);
+            leadRecord.Attributes.Add("new_cell", result.Info["Cell"]);
 
             var guid = service.Create(leadRecord);
             return guid.ToString();

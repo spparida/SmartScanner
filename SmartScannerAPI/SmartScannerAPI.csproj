@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FileUploadOperation.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -198,8 +199,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="CRMSDK\Microsoft.Crm.Sdk.Proxy.dll" />
+    <Content Include="CRMSDK\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
+    <Content Include="CRMSDK\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll" />
+    <Content Include="CRMSDK\Microsoft.Rest.ClientRuntime.dll" />
+    <Content Include="CRMSDK\Microsoft.Xrm.Sdk.Deployment.dll" />
     <Content Include="CRMSDK\Microsoft.Xrm.Sdk.dll" />
     <Content Include="CRMSDK\Microsoft.Xrm.Tooling.Connector.dll" />
+    <Content Include="CRMSDK\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
+    <Content Include="CRMSDK\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -224,6 +232,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <None Include="Properties\PublishProfiles\SmartScannerAPI - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
