@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Tooling.Connector;
+using Newtonsoft.Json;
 using SmartScanner.OCR.JSONResultsParser;
 using SmartScannerAPI.Models;
 using System;
@@ -25,20 +27,20 @@ namespace SmartScannerAPI.Controllers
         [HttpPost]
         [Route("PostImage")]
         [AllowAnonymous]
-        public async Task<Results> Post()
+        public async Task<string> Post()
         {
             string uploadPath = "~/ScanImage/";
             var httpRequest = HttpContext.Current.Request;
-            var filePath= string.Empty;
-            
+            var filePath = string.Empty;
+
             foreach (string file in httpRequest.Files)
             {
                 var postedFile = httpRequest.Files[file];
-                 filePath = HttpContext.Current.Server.MapPath(uploadPath + postedFile.FileName);
+                filePath = HttpContext.Current.Server.MapPath(uploadPath + postedFile.FileName);
                 postedFile.SaveAs(filePath);
                 // NOTE: To store in memory use postedFile.InputStream
             }
-            
+
             var ci = new ContactInfo();
             ImageInfoViewModel responeData = new ImageInfoViewModel();
             string extractedResult = "";
@@ -86,7 +88,8 @@ namespace SmartScannerAPI.Controllers
             }
 
             var results = new Results(ci.Parsers.Select(p => new { p.Name, p.Value }).ToDictionary(d => d.Name, d => d.Value), ci.UnKnown);
-            return results;
+            var crmresult = CreateLeadInCrm(results);
+            return $"Your lead has been created in Crm with leadId : {crmresult}";
         }
 
         /// <summary>
@@ -105,8 +108,9 @@ namespace SmartScannerAPI.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Returns Vision API response
         /// </summary>
+        /// <param name="imageFilePath"></param>
         /// <returns></returns>
         private async Task<HttpResponseMessage> GetAzureVisionAPIResponse(string imageFilePath)
         {
@@ -140,6 +144,32 @@ namespace SmartScannerAPI.Controllers
                 response = await client.PostAsync(uri, content);
             }
             return response;
+        }
+
+        private string CreateLeadInCrm(Results result)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            string connectionString = "Url=https://appfactoryindia.crm8.dynamics.com; Username=satya@appfactoryindia.onmicrosoft.com; Password=Test@1234; authtype=Office365";
+            CrmServiceClient service = new CrmServiceClient(connectionString);
+
+
+            Entity leadRecord = new Entity("lead");
+
+            if (!string.IsNullOrWhiteSpace(result.Info["Name"]))
+            {
+                string[] ssize = result.Info["Name"].Split(null);
+                leadRecord.Attributes.Add("firstname", ssize[0]);
+                leadRecord.Attributes.Add("lastname", ssize[1]);
+            }
+
+            leadRecord.Attributes.Add("emailaddress1", result.Info["Email"]);
+            leadRecord.Attributes.Add("companyname", result.Info["Company"]);
+            leadRecord.Attributes.Add("websiteurl", result.Info["Website"]);
+            leadRecord.Attributes.Add("telephone1", result.Info["Phone"]);
+
+            var guid = service.Create(leadRecord);
+            return guid.ToString();
         }
     }
 }
