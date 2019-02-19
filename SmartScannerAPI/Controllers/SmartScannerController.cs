@@ -5,6 +5,7 @@ using SmartScanner.OCR.JSONResultsParser;
 using SmartScannerAPI.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,9 +21,9 @@ namespace SmartScannerAPI.Controllers
     public class SmartScannerController : ApiController
     {
         // Replace <Subscription Key> with your valid subscription key.
-        const string subscriptionKey = "dca4bfca648145fb82849840e7281667";
+        string subscriptionKey = ConfigurationManager.AppSettings["VisionAPIEndSubscriptionKey"].ToString();
 
-        const string endPoint = "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr";
+        string endPoint = ConfigurationManager.AppSettings["VisionAPIEndPoint"].ToString();
 
         [HttpPost]
         [Route("PostImage")]
@@ -150,10 +151,7 @@ namespace SmartScannerAPI.Controllers
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            string connectionString = "Url=https://appfactoryindia.crm8.dynamics.com; Username=satya@appfactoryindia.onmicrosoft.com; Password=Test@1234; authtype=Office365";
-            CrmServiceClient service = new CrmServiceClient(connectionString);
-
-
+            CrmServiceClient service = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRMConnection"].ConnectionString);
             Entity leadRecord = new Entity("lead");
 
             if (!string.IsNullOrWhiteSpace(result.Info["Name"]))
