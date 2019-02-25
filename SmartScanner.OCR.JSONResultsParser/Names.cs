@@ -9895,7 +9895,10 @@ namespace SmartScanner.OCR.JSONResultsParser
 ,
 "Zulema"
 ,"Zuzana"
-
+,"Meher"
+,"Afroz"
+,"Ludovic"
+,"Hauduc"
 
 };
         }
@@ -9921,6 +9924,7 @@ namespace SmartScanner.OCR.JSONResultsParser
                  , "HOSPITAL"
                  , "GROUP"
                  , "ORGANIZATION"
+                 , "MICROSOFT"
             };
         }
 
@@ -9952,6 +9956,7 @@ namespace SmartScanner.OCR.JSONResultsParser
                 , "Adminstrative"
                 , "Administrator"
                 , "Technician"
+                , "Partner Group Manager"
             };
         }
 

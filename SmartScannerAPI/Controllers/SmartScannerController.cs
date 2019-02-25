@@ -93,6 +93,74 @@ namespace SmartScannerAPI.Controllers
             return $"Your lead has been created in Crm with leadId : {crmresult}";
         }
 
+        [HttpPost]
+        [Route("GetScanData")]
+        [AllowAnonymous]
+        public async Task<Results> GetScanData()
+        {
+            string uploadPath = "~/ScanImage/";
+            var httpRequest = HttpContext.Current.Request;
+            var filePath = string.Empty;
+
+            foreach (string file in httpRequest.Files)
+            {
+                var postedFile = httpRequest.Files[file];
+                filePath = HttpContext.Current.Server.MapPath(uploadPath + postedFile.FileName);
+                postedFile.SaveAs(filePath);
+                // NOTE: To store in memory use postedFile.InputStream
+            }
+
+            var ci = new ContactInfo();
+            ImageInfoViewModel responeData = new ImageInfoViewModel();
+            string extractedResult = "";
+            var errors = new List<string>();
+
+            HttpResponseMessage response = await GetAzureVisionAPIResponse(filePath);
+            // Get the JSON response.
+            string result = await response.Content.ReadAsStringAsync();
+
+            //If it is success it will execute further process.
+            if (response.IsSuccessStatusCode)
+            {
+                // The JSON response mapped into respective view model.
+                responeData = JsonConvert.DeserializeObject<ImageInfoViewModel>(result,
+                    new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Include,
+                        Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs earg)
+                        {
+                            errors.Add(earg.ErrorContext.Member.ToString());
+                            earg.ErrorContext.Handled = true;
+                        }
+                    }
+                );
+
+                var linesCount = responeData.regions[0].lines.Count;
+                for (int i = 0; i < linesCount; i++)
+                {
+                    var wordsCount = responeData.regions[0].lines[i].words.Count;
+                    for (int j = 0; j < wordsCount; j++)
+                    {
+                        //Appending all the lines content into one.
+                        extractedResult += responeData.regions[0].lines[i].words[j].text + " ";
+                    }
+                    extractedResult += Environment.NewLine;
+                }
+                //dynamic data = await req.Content.ReadAsAsync<object>();
+                OCRData ocr = JsonConvert.DeserializeObject<OCRData>(result.ToString());
+
+                Parallel.ForEach(ocr.Regions, (r) =>
+                {
+                    ci.Parse(r);
+                });
+
+            }
+
+            var results = new Results(ci.Parsers.Select(p => new { p.Name, p.Value }).ToDictionary(d => d.Name, d => d.Value), ci.UnKnown);
+            return results;
+        }
+
+
         /// <summary>
         /// Returns the contents of the specified file as a byte array.
         /// </summary>
