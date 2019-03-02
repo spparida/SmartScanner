@@ -11,16 +11,16 @@ namespace SmartScannerAPI.App_Start
     {
         public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
-            //if (operation.operationId == "AskHr_CreateTicketAsync")
-            //{
-            operation.consumes.Add("multipart/form-data");
+            if (operation.operationId != "SmartScanner_PostToCrm")
+            {
+                operation.consumes.Add("multipart/form-data");
             operation.parameters = new List<Parameter>
                 {
                     GetOptionalFileParameter("file"),
                     GetRequiredStringParameter("name"),
 
                 };
-            //}
+            }
         }
 
         private Parameter GetOptionalFileParameter(string fileName)
