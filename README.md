@@ -12,3 +12,6 @@ Dynamics 365 Smart Lead Scanner is a portable and automated solution to this pro
 ## How
 A mobile app will capture the business card details as an image. App will send the Image to a web API. Web API in the background will call Azure Vision API which will decode the Image to Text and add regular expressions to distinguish between Name, Address, Company, Phone No, Email etc. Also Web API try to fetch customer imp details like category, credit score etc.
 Finally it will update the Leads & Customer Insight entities
+
+
+![Alt text](HL-Architecture.JPG?raw=true "Title")
